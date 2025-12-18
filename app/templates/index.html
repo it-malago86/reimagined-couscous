@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>My new artisan shop</title>
+</head>
+<body>
+    <h1>Catalogo prodotti</h1>
+    <div class="grid">
+        {% for p in products %}
+        <div class="card">
+            <h3>{{ p.name }}</h3>
+            <p>{{ p.desc }}</p>
+            <p><strong>€{{ p.price }}</strong></p>
+            <button onclick="sendOrder('{{ p.name }}', '{{ phone }}')">Ordina su WhatsApp</button>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function sendOrder(product, phone) {
+            const msg = encodeURIComponent(`Ciao! Vorrei ordinare: ${product}`);
+            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+        }
+    </script>
+</body>
+</html>
