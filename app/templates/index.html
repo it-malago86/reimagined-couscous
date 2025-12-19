@@ -11,9 +11,9 @@
     <header class="navbar">
         <div class="logo">Meine Kids</div>
         <nav class="nav-links">
-    <a href="javascript:void(0)" onclick="showSection('shop')">Catalogo Online</a>
-    <a href="javascript:void(0)" onclick="showSection('about')">Chi Sono</a>
-</nav>
+            <a href="javascript:void(0)" onclick="showSection('shop')">Catalogo Online</a>
+            <a href="javascript:void(0)" onclick="showSection('about')">Chi Sono</a>
+        </nav>
     </header>
 
     <main id="shop" class="section">
@@ -31,66 +31,80 @@
             {% endfor %}
         </div>
     </main>
-<script>
-    window.cart = [];
 
-    // Definiamo la funzione con la T (corretta)
-    window.addToCart = function(name, price) {
-        console.log("Aggiunta riuscita (T):", name);
-        executeAdd(name, price);
-    };
-
-    // Definiamo la funzione con la D (per sicurezza contro i typo)
-    window.addToCard = function(name, price) {
-        console.log("Aggiunta riuscita (D):", name);
-        executeAdd(name, price);
-    };
-
-    // Logica reale dell'aggiunta
-    function executeAdd(name, price) {
-        window.cart.push({ name: name, price: price });
-        const cartSection = document.getElementById('cart-section');
-        if (cartSection) {
-            cartSection.classList.remove('cart-hidden');
-            cartSection.style.display = 'block';
-        }
-        updateUI();
-    }
-
-    window.updateUI = function() {
-        const list = document.getElementById('cart-items');
-        if (list) {
-            list.innerHTML = window.cart.map(item => 
-                `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #eee;">
-                    <span>${item.name}</span>
-                    <span>€${item.price}</span>
-                </div>`
-            ).join('');
-        }
-        const total = window.cart.reduce((sum, item) => sum + item.price, 0);
-        document.getElementById('total-price').innerText = total;
-    };
-
-    window.showSection = function(id) {
-        document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-        const target = document.getElementById(id);
-        if(target) target.style.display = 'block';
-    };
-
-    console.log("Sistema Pronto: addToCart e addToCard sono attivi.");
-</script>
-   <section id="about" class="section hidden">
-    <div class="about-container" style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center;">
-        <div style="flex: 1; min-width: 300px;">
-            <img src="/static/images/artigiano-al-lavoro.jpg" style="width: 100%; border-radius: 30px; box-shadow: 10px 10px 0px var(--accent-soft);">
+    <section id="about" class="section" style="display:none;">
+        <div class="about-container" style="display: flex; flex-wrap: wrap; gap: 30px; align-items: center; padding: 20px;">
+            <div style="flex: 1; min-width: 300px;">
+                <img src="/static/images/artigiano-al-lavoro.jpg" style="width: 100%; border-radius: 30px; box-shadow: 10px 10px 0px #e2eadd;">
+            </div>
+            <div style="flex: 1; min-width: 300px;">
+                <h2 style="color: #7c9473;">Dietro ogni creazione...</h2>
+                <p>Siamo una piccola bottega nata dal desiderio di riportare la materia al centro della vita quotidiana.</p>
+                <p>Ogni pezzo richiede ore di lavoro e una cura meticolosa per i dettagli.</p>
+            </div>
         </div>
-        <div style="flex: 1; min-width: 300px;">
-            <h2 style="color: var(--accent-dark);">Dietro ogni creazione...</h2>
-            <p>Siamo una piccola bottega nata dal desiderio di riportare la materia al centro della vita quotidiana.</p>
-            <p>Ogni pezzo richiede ore di lavoro e una cura meticolosa per i dettagli.</p>
-        </div>
-	<div class="cart-section" class="cart-hidden>		    	
-	</div>
-	</section>
+    </section>
+
+    <div id="cart-section" class="cart-hidden" style="display:none;">
+        <h4>Il tuo ordine</h4>
+        <div id="cart-items"></div>
+        <hr>
+        <p>Totale: <strong>€<span id="total-price">0</span></strong></p>
+        <input type="text" id="custName" placeholder="Tuo Nome" style="width:100%; margin-bottom:5px;">
+        <input type="text" id="custAddress" placeholder="Indirizzo" style="width:100%; margin-bottom:10px;">
+        <button onclick="finalizeOrder()" style="width:100%; background:#25D366; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer;">
+            Ordina su WhatsApp
+        </button>
+    </div>
+
+    <script>
+        window.cart = [];
+
+        window.showSection = function(id) {
+            console.log("Mostro sezione:", id);
+            document.getElementById('shop').style.display = 'none';
+            document.getElementById('about').style.display = 'none';
+            document.getElementById(id).style.display = 'block';
+        };
+
+        window.addToCart = function(name, price) {
+            console.log("Aggiunto:", name);
+            window.cart.push({ name: name, price: price });
+            
+            const cartSection = document.getElementById('cart-section');
+            if (cartSection) {
+                cartSection.style.display = 'block';
+                cartSection.classList.remove('cart-hidden');
+            }
+            updateUI();
+        };
+
+        window.updateUI = function() {
+            const list = document.getElementById('cart-items');
+            if (list) {
+                list.innerHTML = window.cart.map(item => 
+                    `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #eee;">
+                        <span>${item.name}</span>
+                        <span>€${item.price}</span>
+                    </div>`
+                ).join('');
+            }
+            const total = window.cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('total-price').innerText = total;
+        };
+
+        window.finalizeOrder = function() {
+            const name = document.getElementById('custName').value;
+            const addr = document.getElementById('custAddress').value;
+            if(!name || !addr) return alert("Inserisci i dati!");
+            
+            let summary = window.cart.map(i => i.name).join(", ");
+            let total = document.getElementById('total-price').innerText;
+            const text = `Nuovo ordine da ${name}!\nProdotti: ${summary}\nTotale: €${total}\nIndirizzo: ${addr}`;
+            window.open(`https://wa.me/{{ phone }}?text=${encodeURIComponent(text)}`);
+        };
+
+        console.log("Sistema caricato correttamente.");
+    </script>
 </body>
 </html>
