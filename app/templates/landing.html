@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ricevi ordini su WhatsApp — Artigiani & Artisti</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="btn primary" href="/vetrina">Vedi catalogo</a>
+        <nav class="nav">
+          <a href="#how">Come funziona</a>
+          <a href="#features">Funzionalità</a>
+          <a href="#contact">Contatti</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-inner">
+          <div class="hero-text">
+            <h1>Ricevi ordini direttamente su WhatsApp</h1>
+            <p class="lead">Una semplice vetrina per artisti e artigiani che trasforma i visitatori in clienti, inviando ordini precompilati al tuo numero WhatsApp.</p>
+            <div class="cta">
+              <a class="btn primary" href="/">Vedi catalogo</a>
+              <a class="btn outline" href="#how">Scopri come</a>
+            </div>
+          </div>
+          <div class="hero-card">
+            <div class="card">
+              <h3>Vendi in modo semplice</h3>
+              <p>Carica i tuoi prodotti, condividi il link e ricevi ordini pronti su WhatsApp con tutti i dettagli.</p>
+              <ul>
+                <li>Apertura chat con messaggio precompilato</li>
+                <li>Ordini salvati in dashboard</li>
+                <li>Facile da usare anche da mobile</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how" class="how">
+        <div class="container">
+          <h2>Come funziona</h2>
+          <ol class="steps">
+            <li>
+              <h4>1. Crea la tua vetrina</h4>
+              <p>Aggiungi foto, titolo, prezzo e varianti dei tuoi prodotti.</p>
+            </li>
+            <li>
+              <h4>2. Il cliente ordina</h4>
+              <p>Dal prodotto il cliente clicca su "Ordina via WhatsApp" e compila nome/telefono/opzioni.</p>
+            </li>
+            <li>
+              <h4>3. Ricevi il messaggio</h4>
+              <p>Riceverai un messaggio WhatsApp con tutti i dettagli dell'ordine e potrai confermare direttamente.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="features" class="features">
+        <div class="container">
+          <h2>Funzionalità principali</h2>
+          <div class="grid">
+            <article class="feature">
+              <h3>Click-to-chat</h3>
+              <p>Link WhatsApp (wa.me) con messaggio precompilato — niente configurazioni complesse per iniziare.</p>
+            </article>
+            <article class="feature">
+              <h3>Dashboard ordini</h3>
+              <p>Salva gli ordini in SQLite e visualizzali nella dashboard protetta.</p>
+            </article>
+            <article class="feature">
+              <h3>Responsive</h3>
+              <p>Ottimizzato per mobile: i clienti ordinano dal telefono in pochi tocchi.</p>
+            </article>
+            <article class="feature">
+              <h3>Facile da scalare</h3>
+              <p>Possibilità di integrare WhatsApp Cloud API, pagamenti e gestione inventario in seguito.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact">
+        <div class="container">
+          <h2>Vuoi provarlo?</h2>
+          <p>Se vuoi, posso aiutarti a collegare il backend Flask e a mettere tutto in esecuzione con Docker.</p>
+          <p>Per test rapido, imposta nella variabile d'ambiente <code>ARTISAN_PHONE</code> il tuo numero e prova il flusso di ordine.</p>
+          <div class="contact-row">
+            <a class="btn primary" href="/">Apri la vetrina</a>
+            <a class="btn outline" href="mailto:tuo@email.example">Contattami</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year">{{ current_year if current_year is defined else "" }}</span> ArtigianiConnect — Progetto personale</p>
+      </div>
+    </footer>
+  </body>
+</html>

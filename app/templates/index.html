@@ -19,15 +19,30 @@
     <main id="shop" class="section">
         <div class="grid">
             {% for p in products %}
-            <div class="card" onclick="addToCart('{{ p.name }}', {{ p.price }})">
-                <img src="{{ p.image }}" alt="{{ p.name }}" class="product-img">
+            <div class="card" onclick="addToCart('{{ p.name }}', {{ p.price }})" style="cursor: pointer;">
+               <div class="add-icon">Aggiungi</div>
+		 <img src="{{ p.image }}" alt="{{ p.name }}" class="product-img">
                 <div class="product-info">
                     <h3>{{ p.name }}</h3>
                     <p>{{ p.desc }}</p>
                     <span class="price">€{{ p.price }}</span>
                 </div>
                 <div class="add-icon">＋</div>
-            </div>
+	 <div id="cart-section" style="display:none; position: fixed; bottom: 20px; right: 20px; width: 320px; background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid #e5e7eb; z-index: 1000;">
+   		 <h4 style="margin-top:0;">Il tuo ordine</h4>
+   		 <div id="cart-items" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
+       			 </div>
+	 <div style="border-top: 1px solid #eee; padding-top: 10px; margin-bottom: 15px;">
+       		 <strong>Totale: €<span id="total-price">0</span></strong>
+   	 </div>
+    
+    <input type="text" id="custName" placeholder="Tuo Nome" style="width:100%; padding: 8px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 5px;">
+    <input type="text" id="custAddress" placeholder="Indirizzo di consegna" style="width:100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px;">
+    
+    <button onclick="finalizeOrder()" style="width:100%; background:#25D366; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">
+        Invia Ordine su WhatsApp
+    </button>
+</div>
             {% endfor %}
         </div>
     </main>
@@ -45,66 +60,67 @@
         </div>
     </section>
 
-    <div id="cart-section" class="cart-hidden" style="display:none;">
-        <h4>Il tuo ordine</h4>
-        <div id="cart-items"></div>
-        <hr>
-        <p>Totale: <strong>€<span id="total-price">0</span></strong></p>
-        <input type="text" id="custName" placeholder="Tuo Nome" style="width:100%; margin-bottom:5px;">
-        <input type="text" id="custAddress" placeholder="Indirizzo" style="width:100%; margin-bottom:10px;">
-        <button onclick="finalizeOrder()" style="width:100%; background:#25D366; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer;">
-            Ordina su WhatsApp
-        </button>
+   <div id="cart-section" style="display:none; position: fixed; bottom: 20px; right: 20px; width: 320px; background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid #e5e7eb; z-index: 1000;">
+    <h4 style="margin-top:0;">Il tuo ordine</h4>
+    <div id="cart-items" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
+        </div>
+    <div style="border-top: 1px solid #eee; padding-top: 10px; margin-bottom: 15px;">
+        <strong>Totale: €<span id="total-price">0</span></strong>
     </div>
+    
+    <input type="text" id="custName" placeholder="Tuo Nome" style="width:100%; padding: 8px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 5px;">
+    <input type="text" id="custAddress" placeholder="Indirizzo di consegna" style="width:100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px;">
+    
+    <button onclick="finalizeOrder()" style="width:100%; background:#25D366; color:white; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">
+        Invia Ordine su WhatsApp
+    </button>
+</div>
+<script>
+    window.cart = [];
 
-    <script>
-        window.cart = [];
+    window.addToCart = function(name, price) {
+        console.log("Aggiungendo:", name, price); // Questo serve per il debug
+        window.cart.push({ name: name, price: price });
+        
+        // Mostra il carrello
+        const cartSection = document.getElementById('cart-section');
+        cartSection.style.display = 'block';
+        
+        updateUI();
+    };
 
-        window.showSection = function(id) {
-            console.log("Mostro sezione:", id);
-            document.getElementById('shop').style.display = 'none';
-            document.getElementById('about').style.display = 'none';
-            document.getElementById(id).style.display = 'block';
-        };
+    function updateUI() {
+        const list = document.getElementById('cart-items');
+        list.innerHTML = window.cart.map(item => `
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom:1px solid #eee;">
+                <span>${item.name}</span>
+                <span>€${item.price}</span>
+            </div>
+        `).join('');
 
-        window.addToCart = function(name, price) {
-            console.log("Aggiunto:", name);
-            window.cart.push({ name: name, price: price });
-            
-            const cartSection = document.getElementById('cart-section');
-            if (cartSection) {
-                cartSection.style.display = 'block';
-                cartSection.classList.remove('cart-hidden');
-            }
-            updateUI();
-        };
+        const total = window.cart.reduce((sum, item) => sum + item.price, 0);
+        document.getElementById('total-price').innerText = total;
+    }
 
-        window.updateUI = function() {
-            const list = document.getElementById('cart-items');
-            if (list) {
-                list.innerHTML = window.cart.map(item => 
-                    `<div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #eee;">
-                        <span>${item.name}</span>
-                        <span>€${item.price}</span>
-                    </div>`
-                ).join('');
-            }
-            const total = window.cart.reduce((sum, item) => sum + item.price, 0);
-            document.getElementById('total-price').innerText = total;
-        };
+    window.finalizeOrder = function() {
+        const name = document.getElementById('custName').value;
+        const addr = document.getElementById('custAddress').value;
 
-        window.finalizeOrder = function() {
-            const name = document.getElementById('custName').value;
-            const addr = document.getElementById('custAddress').value;
-            if(!name || !addr) return alert("Inserisci i dati!");
-            
-            let summary = window.cart.map(i => i.name).join(", ");
-            let total = document.getElementById('total-price').innerText;
-            const text = `Nuovo ordine da ${name}!\nProdotti: ${summary}\nTotale: €${total}\nIndirizzo: ${addr}`;
-            window.open(`https://wa.me/{{ phone }}?text=${encodeURIComponent(text)}`);
-        };
+        if(!name || !addr) {
+            alert("Inserisci nome e indirizzo per procedere!");
+            return;
+        }
 
-        console.log("Sistema caricato correttamente.");
-    </script>
+        const items = window.cart.map(i => `- ${i.name} (€${i.price})`).join('%0A');
+        const total = document.getElementById('total-price').innerText;
+        const text = `Ciao! Vorrei ordinare:%0A${items}%0A%0ATotale: €${total}%0A%0ANome: ${name}%0AIndirizzo: ${addr}`;
+        
+        // Apre WhatsApp in una nuova scheda
+        window.open(`https://wa.me/{{ phone }}?text=${text}`);
+    };
+</script>
+    	
+    	    
 </body>
 </html>
+
