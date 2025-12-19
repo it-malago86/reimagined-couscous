@@ -3,7 +3,9 @@ services:
   web:
     build: .
     ports:
-      - "80:5000"
+      - "8080:5000"
     volumes:
-      - ./data:/app/data
-    restart: always
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+   
