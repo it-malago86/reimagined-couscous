@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> 
     <title>Meine Kids | Online Shop</title>
 </head>
 <body>
@@ -19,15 +19,19 @@
     <main id="shop" class="section">
         <div class="grid">
             {% for p in products %}
-            <div class="card" onclick="addToCart('{{ p.name }}', {{ p.price }})" style="cursor: pointer;">
-               <div class="add-icon">Aggiungi</div>
-		 <img src="{{ p.image }}" alt="{{ p.name }}" class="product-img">
-                <div class="product-info">
-                    <h3>{{ p.name }}</h3>
-                    <p>{{ p.desc }}</p>
-                    <span class="price">€{{ p.price }}</span>
-                </div>
-                <div class="add-icon">＋</div>
+	  <div class="card"> <img src="{{ p.image }}" alt="{{ p.name }}" class="product-img">
+	      <div class="product-info">
+	          <h3>{{ p.name }}</h3>
+	          <p>{{ p.desc }}</p>
+	          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+	              <span class="price">€{{ p.price }}</span>
+	              <button class="btn-add" onclick="event.stopPropagation(); addToCart('{{ p.name }}', {{ p.price }})">
+	                  ＋ Aggiungi
+	              </button>
+	          </div>
+	      </div>
+	  </div>
+	 <div class="add-icon">＋</div>
 	 <div id="cart-section" style="display:none; position: fixed; bottom: 20px; right: 20px; width: 320px; background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); border: 1px solid #e5e7eb; z-index: 1000;">
    		 <h4 style="margin-top:0;">Il tuo ordine</h4>
    		 <div id="cart-items" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
