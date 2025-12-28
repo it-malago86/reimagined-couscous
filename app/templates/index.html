@@ -118,10 +118,24 @@
         const items = window.cart.map(i => `- ${i.name} (€${i.price})`).join('%0A');
         const total = document.getElementById('total-price').innerText;
         const text = `Ciao! Vorrei ordinare:%0A${items}%0A%0ATotale: €${total}%0A%0ANome: ${name}%0AIndirizzo: ${addr}`;
-        
-        // Apre WhatsApp in una nuova scheda
-        window.open(`https://wa.me/{{ phone }}?text=${text}`);
-    };
+
+	// 1. Salva nel database tramite la nostra API
+    fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            name: name,
+            address: addr,
+            items: items,
+            total: parseFloat(total)
+        })
+    }).then(() => {
+        // 2. Dopo il salvataggio, apri WhatsApp
+        const itemsMsg = window.cart.map(i => `- ${i.name}`).join('%0A');
+        const text = `Nuovo Ordine!%0A${itemsMsg}%0A%0ATotale: €${total}%0A%0ANome: ${name}`;
+        window.open(`https://wa.me/{{ 321456789 }}?text=${text}`);
+    }); 
+  };
 </script>
     	
     	    

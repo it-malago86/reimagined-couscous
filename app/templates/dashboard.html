@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard Ordini</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 12px; border: 1px solid #eee; text-align: left; }
+        th { background: #111827; color: white; }
+        .container { padding: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 Gestione Ordini</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Prodotti</th>
+                    <th>Totale</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order[5] }}</td>
+                    <td>{{ order[1] }}<br><small>{{ order[2] }}</small></td>
+                    <td>{{ order[3] }}</td>
+                    <td>€{{ order[4] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
